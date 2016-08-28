@@ -4,7 +4,7 @@
 //
 //  Created by Pasan Premaratne on 1/19/16.
 //  Copyright © 2016 Treehouse. All rights reserved.
-//
+////
 
 import UIKit
 
@@ -78,7 +78,7 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         updateCellBackgroundColor(indexPath, selected: true)
-        reset()
+        reset() //every single time you want to select another item 
         currentSelection = vendingMachine.selection[indexPath.row]
         updateTotalPriceLabel()
     }
@@ -108,8 +108,10 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
             do {
                 try vendingMachine.vend(currentSelection, quantity: quantity)
                 updateBalanceLabel()
-            } catch {
-                // FIXME: Error Handling Code!!!
+            } catch VendingMachineError.OutOfStock {
+                showAlert()
+            } catch VendingMachineError.InsufficientFunds(required: ){
+                
             }
         } else {
             // FIXME: Alert user to no selection
@@ -128,6 +130,7 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         }
     }
     
+    
     func updateQuantityLabel() {
         quantityLabel.text = "\(quantity)"
     }
@@ -141,6 +144,20 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         updateTotalPriceLabel()
         updateQuantityLabel()
     }
+    
+    
+    func showAlert() {
+        let alertController = UIAlertController(title: "Out of stock", message: nil, preferredStyle: .Alert)//modal view
+        let okAction = UIAlertAction(title: "ok", style: .Default, handler: dismissAlert)
+        alertController.addAction(okAction)
+        
+        presentViewController(alertController, animated: true, completion: nil) // presents an modal view for it prevents user from entering input in underlying view
+    }
+    
+    func dismissAlert(sender: UIAlertAction) {
+        reset()
+    }
+    
     
 }
 
