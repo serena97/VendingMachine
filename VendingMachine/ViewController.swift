@@ -102,7 +102,7 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     }
     
     // MARK: - Helper Methods
-    
+    //
     @IBAction func purchase() {
         if let currentSelection = currentSelection {
             do {
